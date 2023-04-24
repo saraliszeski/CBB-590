@@ -1,0 +1,302 @@
+\documentclass[12pt]{extarticle}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts,amssymb}
+\usepackage{bm,bbm,txfonts}
+\usepackage{enumitem}
+\usepackage{graphicx}
+\graphicspath{ {images/} }
+\usepackage{listings}
+\usepackage{tikz}
+\usepackage{mathtools}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+\lstset{style=mystyle}
+\usepackage[bottom=1in,top=1in,left=.75in,right=.75in]{geometry}
+\usepackage{mathtools}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\graphicspath{ {./images/} }
+
+\usepackage{float}
+\newcommand\myeq{\stackrel{\mathclap{\normalfont\mbox{choose class n?}}}{=}}
+\DeclarePairedDelimiter\abs{\lvert}{\rvert}
+
+\pagestyle{fancy}
+\usepackage{graphicx} % Required for inserting images
+% \fancyhf{Project Proposal Computational Biology}
+\rhead{Sara Liszeski}
+\title{Project Proposal}
+\author{\small Sara Liszeski}
+\date{\small February 2023}
+\begin{document}
+\thispagestyle{plain}
+\begin{center}
+    \Large
+    \textbf{Reduce, Reuse, Recalculate: Improvement of the Carbon Condensation Capabilities of MeOXC using K* }
+        
+    \vspace{0.4cm}
+    \large
+    Analysis Supplementing the Mission of a Circular Carbon Economy
+        
+    \vspace{0.4cm}
+    \textbf{Sara Liszeski}
+       
+    \vspace{0.9cm}
+    \small
+    \textbf{Abstract}\\
+    Human society releases massive amounts of $CO_2$ into the atmosphere every second. In order to combat this damage, researchers are looking to capture and resuse carbon in purposeful ways. MeOXC is an enzyme in \textit{Methy-lorbrum extroquens} that has a role in catalyzing C1-C1 condensation of carbon molecules. Nattermann. et. al. mutated this enzyme to improve its efficacy, resulting in the enzyme MeOXC4. This project seeks to validate and expand upon these results. The PDB for 2JI8 was used as a model and was processed in a limited manner by the OSPREY software package running the K* algorithm \cite{Hallen}, \cite{Lilien}. With a 72 hour time limit, 217 viable sequences were found, with a top K* score of 35.994817. Among the top 20 sequences found, the average similarity to MeOXC4 in its 8 mutable positions was 12\%.Positions 556 and 483 had clear improvements with valine and tyrosine substitutions, respectively.
+\end{center}
+\section{Introduction}
+At any moment in time, there are a few topics that gather a large share of the public's attention for science. In the 1960s, this was the moon landing and in 1980, it was genetic modification of food; in the 20th century, this topic has become climate change and environmental concerns. One major concern had by climate scientists is the level of carbon in the form of $CO_2$ being constantly released by industrial plants and other forms of human energy consumption. In order to combat high levels of atmospheric carbon, society can either reduce the amount of carbon being produced or they can remove the existing carbon. \\\indent The latter method is the focus of several environmental scientists, including Nattermann et. al. This group intends to use the $C_1$ compounds in industry and other areas. However, this cannot occur with just C1; these carbons must be condensed into multi-carbon compounds to produce useful materials. This process is called carbon fixation and is incredibly complex. Nattermann et. al. focus on linear pathways that catalyze direct C1-C1 condensation in order to avoid altering the host organism's metabolism in a fatal or harmful manner.\\
+\indent In nature, several microorganisms can successfully and efficiently condense carbon in this manner. These organisms are methylotrophic and formatrophic \cite{Nattermann}. However, these organisms cannot perform at the efficiency needed to implement carbon condensation in the industrial setting. Therefore, chemical engineers, biological scientists, and other science professionals are hard at work in places like the Max-Planck Institute for Terrestrial Microbiology to alter these organisms to be successful at this task. \\\indent Natterman et. al. specifically examined MeOXC, a variant of oxalyl-CoA decarboxylase from Methylorbrum extroquens. It binds with thiamine diphosphate (ThDP or TPP) and adenosine Di-phosphate (ADP) to catalyze the decarboxylation of oxalyl-CoA. Nattermann et. al. focused on altering these enzymes to mimic the activity of the efficient (yet currently un-analyzable due to lack of structural information) HACL enzymes, which catalyze the transformation of formyl-CoA with formaldehyde to produce glycolyl-CoA. This activity is referred to as Glycolyl-Coa Synthase (GCS) Nattermann et. al. sought to enable \textit{Methylorubrum extorquens} to produce glycolyl-CoA at physiologically accurate leevels of formaldehyde concentrations. Using structure-guided enzyme engineering, the team created a series of 3600 clones. These clones contained mutations at I48, E134, Y135, A415, S568, E567, and I571-- sites which were chosen for their close position to the $\alpha$-carbanion or enamine intermediate. These sites were also close to the binding position of TPP, making them important in catalysis. They identified the final variant, MeOXC4, as one carrying four substitions: E135G, A415C, Y497F, and S568G.\\
+\indent This project was completed in order to validate these results computationally, rather than through wet lab analysis. This necessitates a computational approach for choosing replacement amino acid rotamers in the eight target positions. Then, once conformations are created, their energy must be analyzed in order to determine which yields the lowest-energy structure, signifying optimality of binding. Therefore, the overall structure of the project was the following \begin{enumerate}
+    \item Obtain structures of the MeOXC/ formyl-CoA complex
+    \item Compute the K* scores for mutations of the eight residues
+    \item Compare the results and find the optimum conformation
+\end{enumerate}
+The end goal was to obtain several structures and compare them to the 4 mutations present in MeOXC4 to verify improvement or optimality of the active site. 
+\section{Methods}
+\subsection{The K* algorithm}
+The K* algorithm, developed by Georgiev et. al. and Lilien et. al in \cite{Lilien}, \cite{Georgiev}, is a means of analyzing the strength of protein-ligand binding in a complex. The K* score is made to be an approximation of the true binding constant $K_a = \frac{1}{K_D}$ . It utilizes several partition functions:\begin{align}
+    q_{pL} = \sum_{b \in B}exp(-E_b/RT)\\
+    q_{p} = \sum_{f \in F}exp(-E_f/RT)\\
+    q_{l} = \sum_{l \in L}exp(-E_l/RT)\\
+    K* = \frac{q_{pL}}{q_p q_L}
+\end{align} where B, F, and L signify the energies of ensembles based on rotamers for the protein-ligand complex \cite{Donald}. P is the free protein, and L is the free ligand. The partition functions aid in the calculation of the binding constant, as explained in \cite{Donald}. There are several different strategies for shrinking the search space of the K* algorithm; here, we employ a manual modifed residue type filter. The K* algorithm also uses a minimized dead-end elimination strategy, ensuring that all conformations not in the range of $(1-\epsilon)$ will be pruned. Thus, in an ideal situation, after pruning to the resistor protocol's default 0.683 epsilon value, the K* algorithm could be run again with smaller and smaller $\epsilon$ values until the GMEC is found. Georgiev et. al. found that the optimum method of running K* involves using the minDEE/A* algorithm as a pre-processing step. 
+To complete the K* rankings, the software package OSPREY (Open Source Protein Redesign for You) was used \cite{Hallen}, which uses the minDEE/A*/K* algorithm. The RESISTOR protocol was used as a general guideline for the procedure \cite{RESISTOR}. 
+\subsection{Issues and Approximation-Based Solutions}
+Several issues arose with using OSPREY, mostly due to inexperience and skill issues, combined with lack of available information. To begin, there was no PDB including Formyl-CoA bound to MeOXC in Methylorubrum extorquens AM1. Because creating such a file would be a significant endeavor involving docking algorithms, the simplist approximation was gotten using an existing PDB file with an OXC bound to Formyl-CoA from another organism, Oxalobacter formigenes. BLAST was used to compare the sequences of PDB 7AYG, a non-bound MeOXC molecule, with PDB 2JI8, the bound OXC mentioned above. The two FASTA sequences had an identity match of 356/569 (63\%) and a positive match of 429/569 (75\%), with a 15/569 (2\%) gap. 
+The two sequences were similar, as shown in Figure 1, and identical as far as amino acid identity in the spots that were identified as targets by \cite{Nattermann}, so 2JI8 was chosen as an approximation protein.
+\begin{figure}
+    \centering
+    \includegraphics[scale=0.6]{images/alignmentofseq_image.png}
+    \caption{BLAST alignment of the sequences of 2JI8 (Oxalobacter formigenes) and 7AYG (Methylorubrum extorquens AM1) }
+    \label{fig:my_label}
+\end{figure}
+Because of slight differences in the PDB files of the two molecules 7AYG and 2JI8, the positions of the amino acids mutated in the algorithm differ. For the purposes of analysis, it was simpler to use the altered numbers in the results and discussion section. The conversion may be found in Figure 2.
+\begin{figure}
+\begin{center}
+\begin{tabular}{||c c c||} 
+ \hline
+ 7AYG Position & 2JI8 Position & MeOXC4 Mutation \\
+ \hline\hline
+ 48 & 34 &\\ 
+ \hline
+ 134 & 120 &\\
+ \hline
+ 135 & 121 & GLY \\
+ \hline
+ 415 & 401 & CYS \\
+ \hline
+ 497 & 483 & PHE\\ 
+ \hline
+ 567 & 552 & \\
+ \hline
+ 568 & 553 & GLY\\ 
+ \hline
+ 571 & 556 &\\  
+ \hline
+\end{tabular}
+\end{center}
+\caption{Translation between 7AYG and 2JI8 residue numbering}
+\label{fig:my_label}
+\end{figure}
+
+\indent The next steps of RESISTOR involved separating the protein from the ligand. However, several issues arose here; RESISTOR and canonical K* is design for two-body systems, whereas the MeOXC protein involves several separate bodies, including the protein itself, ADP, TPP, and Mg a magneisum ion. Because the additional molecules caused issues in this naive instance of OSPREY, they were removed with acknowledgement that their absence will cause lack of precision. To run the K* algorithm in its true form, all mutable residue positions should be allowed to mutate to a wide range of amino acids. However, this was infeasible due to the time constraint present after the task of creating the input files. Therefore, since this project is focused on reverse engineering solutions, the given substitutions E135G, A415C, Y497F, and S568G were provided as allowable amino acid substitutions, as well as similar amino acids. For the positions that did not mutate for MeOXC4, amino acids similar to the ones present in MeOXC were provided.\\
+\begin{figure}
+\begin{center}
+\begin{tabular}{||c c c||} 
+ \hline
+ Position & Starting Amino Acid & Provided Mutations \\
+ \hline\hline
+ 34 & ILE & ALA, PHE, GLU \\ 
+ \hline
+ 120 & TYR & ALA, PHE, GLY, VAL, LEU \\
+ \hline
+ 121 & GLU & ALA, PHE \\
+ \hline
+ 401 & ALA & ALA, CYS, SER \\
+ \hline
+ 483 & TYR & ALA, PHE, GLY, VAL, LEU \\ 
+ \hline
+ 552 & GLU & GLN, PRO, ARG \\
+ \hline
+ 553 & SER & ALA, PHE, GLY, VAL, LEU, TRP \\ 
+ \hline
+ 556 & TYR & ALA, CYS, TRP\\  
+ \hline
+\end{tabular}
+\end{center}
+\caption{Permitted Mutations per Position for K*}
+ \label{fig:my_label}
+\end{figure}
+
+\section{Results}
+\subsection{Preliminary Results:}
+Due to the runtime of the solution, a full enumeration of all sequences permitted by the above mutations was not allowed; instead, preliminary results will consist of analysis of the first 1480 of 2916 sequences. These sequences were processed using the pandas code in the supplemental informatin section. All sequences that produced an unstable configuration were discarded. Around 15 percent (217/1480) of the sequences yielded stable results. Of these sequences, the average identity match to Nattermann's results, quantified as the percentage of the eight mutable acids that matched the eight in the MeOXC4 enzyme, was 0.1822. In the top 20 sequences examined, weighted by K* score, the average match was 12\% -- less than one match per sequence.\\
+\begin{figure}
+\begin{center}
+\begin{tabular}{||c c c||} 
+ \hline
+ Position & Starting Amino Acid &  Identity Count \\
+ \hline
+ 34 & ILE & 7 LEU, 6 VAL, 7 ILE\\
+ \hline
+ 120 & TYR & 9 PHE, 9 TYR, 2 ALA \\
+ \hline
+ 121 & GLU & 12 PHE, 6 GLU, 2 GLY  \\
+ \hline
+ 401 & ALA & 20 ALA \\
+ \hline
+ 483 & TYR & 20 TYR \\ 
+ \hline
+ 552 & GLU & 20 GLN \\
+ \hline
+ 553 & SER & 12 ALA, 8 SER \\ 
+ \hline
+ 556 & TYR & 20 VAL\\  
+ \hline
+ \end{tabular}
+\end{center}
+\caption{Mutation Identities per Position of the Top 20 Sequences by K* score}
+\label{fig:my_label}
+\end{figure}
+ The top K* score was 35.994817, with the top 20 within a range of 35.968883-35.994817, and an overall range of 35.483094-35.994817. The top three sequences were \begin{enumerate}
+     \item L34 F120 F121 A401 Y483 Q552 A553 V556
+     \item V34 F120 F121 A401 Y483 Q552 A553 V556
+     \item I34 F120 F121 A401 Y483 Q552 A553 V556
+ \end{enumerate}
+
+ We can also use the results of the estimated partition functions yielded by OSPREY. OSPREY yields partition scores for the free protein, free ligand, and the protein-ligand complex. According to {Donald}, 
+ K* is an approximation of the binding constant \begin{equation}
+     K_A = \frac{1}{K_D}
+ \end{equation}
+ Therefore, by taking the reciprocal of the K* values, we have a $K_D$ that we can compare to the data in the paper. $K_D$ is the dissociation constant of an enzyme. The larger the $K_D$ value, the weaker the binding and the worse the catalytic efficiency of the enzyme. This value is directly calculable as the reciprocal of the K* score. The values all lay within the range of 0.027782-0.028182. The top 20 scores all had $K_D$ values of 0.027802-0.027782.
+ \begin{figure}
+    \centering
+    \includegraphics[scale=0.8]{images/Picture1.png}
+    \caption{Average K* score for each viable mutation in each mutable position. Each average is the sum of the K* scores of all sequences with the given amino acid in position i, regardless of the mutations in all other positions. }
+    \label{fig:my_label}
+\end{figure}
+\begin{figure}
+    \centering
+    \includegraphics[scale=0.8]{images/Picture3.png}
+    \caption{K* Score and Percent Similarity to MeOXC4}
+    \label{fig:my_label}
+\end{figure}
+\newpage
+\section{Discussion}
+The K* scores measured by the algorithm represents the stability that a given mutation will grant to a protein or protein complex. Since we are focused on binding in this experiment, a higher K* score means a better binding ,since the bound state will be more stable. We do not use a negative design here, so we only focus on mutating our sequence toward a goal, rather than away from an undesirable function. The results yielded by this run of the K* algorithm are interesting but not conclusive. To begin, they were severely limited by the assumptions described in the methods sections. The energies calculated lack consideration of the TPP and ADP molecules and the magnesium atom, both present in the active site under consideration and essential to the catalyzation power of the enzyme. Their absence causes spatial consideration issues, along with the discarding of several vital interactions. Additionally, due to time, each mutable residue was only allowed to mutate to up to three other amino acid types, depending on specification. This assumption severely limits the applications of K* for this experiment, as all possible mutations are not being enumerated.
+However, with these allowances aside, the sequences produced did not closely match the results found in the wet lab mutations of {Nattermann}. In fact, the top 20 K* scores belong to sequences with on average less than one residue matching the identity of MeOXC4. The maximum matching was 0.625\%, or five residues, with a K* score of 35.597 and a ranking of 207 overall. \\
+\indent This lack of matching may be due to one of two reasons: the first is that the wet lab sequence was severely limited by mutational probability, which this K* run did not take into consideration, and thus the experimenters did not screen enough clones to reach a point where the more sequences with better K* were found. The second (and more realistic option) is that the parameters for the algorithm were limited in some capacity that cast out biologically plausible sequences. This may be true, as due to time constraints, no additional runs could be done with greater flexibility of positions near the binding site, meaning that the modeled molecule had more clashes than the real molecule might have had. Additionally, almost 90 percent of all generated sequences were called unstable; this number is quite high and should be lowered via improved planning for the algorithm's search space.\\
+\indent The data is semi-conclusive on the best offerend amino acid for several positions, namely positions 483 and 556 as evidence by these mutations' average K* scores in Figure 5. In position 483, the wild type residue TYR was the sole 483 amino acid present in the top 78 sequences. In the enzyme MeOXC4, this position is occupied by PHE, which did not confer extra stability in the sequences examined. No mutation occurred for 2JI8 position 556 in MeOXC4, but PHE appears to confer some stability. This could be due to the fact that  PHE is nonpolar, compared to tyrosine's polarity. Both are uncharged and aromatic, so if polarity is set aside, the difference might be due to phenylalanines smaller size in its lack of an OH group. The best 3 sequences all had F120 F121 A401 Y483 Q552 A553 V556 as their last 7 residues. As these results do not include all possible enumerations, these mutations cannot be said to be the optimum sequence, but they are an option that can be improved upon in future iterations and tested in a wet lab.
+\section{Conclusion}
+The sequences with the top K* values offer new options for researchers wishing to investigate better amino acid sequences for the MeOXC enzyme. Though they are not polished, they provide insight into the trends of well-performing sequences for this active site. With more work, the results of the K* algorithm could offer valuable insight and options for future work on the catalytic efficiency of MeOXC.
+\subsection{Future Work}
+The options for future work on this project are bountiful. First, more possible rotamers may be specified for each position considered in {Natterman}, with considerations of probabilities of mutations for replicability. Second, a better input model can be generated, with an additional third body, a cofactor, containing ADP, TPP, and the magnesium ion. This would create different spatial and charge parameters for the algorithm, making the results more accurate. Third, more positions around the active side can be made flexible, potentially allowing conformations said to cause clashes or have excess energy values in this run of K*. Additionally, K* can be run with a higher $\epsilon$ value, enumerating fewer sequences.
+\subsection{Lessons Learned}
+During this project, I learned several lessons. To begin, I learned that I need to limit my ambitions to a more reasonable level when they include learning to use a complex software system. I believed that the formatting would be an insignificant amount of my time whereas analysis and multiple runs would make up the bulk of the project. In this instance, I was incorrect. I learned how difficult it is to get up to speed on file formatting specifications for software packages. Specifically, I learned that fitting a pre-specified protocol, such a resistor, to a new problem, such as a 3-body problem, can be problematic and involve creative ways of re-examining the problem. I learned how sensitive yaml files can be, but how important it is to create them correctly so that specifications are as accurate as possible.  I additionally learned that while methods may be called fast in theory, it is often difficult for a student's schedule. Specially, I naively did not expect the K* algorithm to take as long as it did. I now have a better understanding of the timescale of the research performed on computational methods. I also used the pandas data processing package for the first time and gained a better understanding of Excel's capabilities to help me comprehend trends in data. 
+\begin{thebibliography}{1}
+
+\bibitem{Nattermann} Nattermann, Maren et al. “Engineering a Highly Efficient Carboligase for Synthetic One-Carbon Metabolism.” ACS catalysis vol. 11,9 (2021): 5396-5404. doi:10.1021/acscatal.1c01237
+
+\bibitem{Donald} Donald, Bruce R. Algorithms in Structural Molecular Biology. The MIT Press, 2011.
+
+\bibitem{Georgiev} Georgiev, Ivelin et al. “The minimized dead-end elimination criterion and its application to protein redesign in a hybrid scoring and search algorithm for computing partition functions over molecular ensembles.” Journal of computational chemistry vol. 29,10 (2008): 1527-42. doi:10.1002/jcc.20909
+
+\bibitem{Lilien}Lilien, Ryan H et al. “A novel ensemble-based scoring and search algorithm for protein redesign and its application to modify the substrate specificity of the gramicidin synthetase a phenylalanine adenylation enzyme.” Journal of computational biology : a journal of computational molecular cell biology vol. 12,6 (2005): 740-61. doi:10.1089/cmb.2005.12.740
+
+\bibitem{Hallen}Hallen, Mark A et al. “OSPREY 3.0: Open-source protein redesign for you, with powerful new features.” Journal of computational chemistry vol. 39,30 (2018): 2494-2507. doi:10.1002/jcc.25522
+
+\bibitem{RESISTOR}Guerin N;Feichtner A;Stefan E;Kaserer T;Donald BR; “Resistor: An Algorithm for Predicting Resistance Mutations via Pareto Optimization over Multistate Protein Design and Mutational Signatures.” Cell Systems, U.S. National Library of Medicine, https://pubmed.ncbi.nlm.nih.gov/36265469/. 
+
+
+
+\end{thebibliography}
+\section{Supplemental Information}
+The following code was used to process the K* data:
+\small
+\begin{lstlisting}[language=Python]
+import pandas as pd
+import openpyxl
+df = pd.DataFrame()
+with open('resistor.txt') as f:
+    lines = [line for line in f.readlines()]
+
+split_lines = []
+for line in range(28, len(lines)): #lines 1-28 are pre-processing data
+    x = lines[line].split()
+    split_lines.append(x)
+    
+#arrays for data
+seq_nums = []
+A34 = []
+A120 =[]
+A121=[]
+A401=[]
+A483=[]
+A552 = []
+A553 = []
+A556= []
+kstar = []
+numconfs = []
+protz = []
+ligz = []
+
+for line in split_lines:
+    if line[32] != "NaN":
+        seq_nums.append(line[1])
+        A34.append(line[2].split("=")[1])
+        A120.append(line[3].split("=")[1])
+        A121.append(line[4].split("=")[1])
+        A401.append(line[5].split("=")[1])
+        A483.append(line[6].split("=")[1])
+        A552.append(line[7].split("=")[1])
+        A553.append(line[8].split("=")[1])
+        A556.append(line[9].split("=")[1])
+        kstar.append(line[11])
+        numconfs.append(line[30])
+        protz.append(line[16])
+        ligz.append([line[26], line[27]])
+
+df["sequences numbers"] = pd.Series(seq_nums)
+df["A34"] = pd.Series(A34)
+df["A120"] = pd.Series(A120)
+df["A121"] = pd.Series(A121)
+df["A401"] = pd.Series(A401)
+df["A483"] = pd.Series(A483)
+df["A552"] = pd.Series(A552)
+df["A553"] = pd.Series(A553)
+df["A556"] = pd.Series(A556)
+df["kstar"] = pd.Series(kstar)
+df["numconfs"] = pd.Series(numconfs)
+df["protein z scores"] = pd.Series(protz)
+df["ligand z scores"] = pd.Series(ligz)
+
+df.to_excel("kstar_results.xlsx")  
+\end{lstlisting}
+The .yaml file, frcmod file, and other information used to parameterize and run the K* program may be found at [LIST GITHUB REPOSITORY]
+\end{document}
